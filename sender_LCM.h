@@ -4,6 +4,7 @@
 #include <lcm/lcm-cpp.hpp>
 #include "spi_command_t.hpp"
 #include "spi_data_t.hpp"
+#include "pcl_type.hpp"
 
 class Handler {
   public:
