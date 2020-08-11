@@ -12,8 +12,8 @@ int main(int argc, char **argv)
     
     for(int i=0; i<30; i++){
         IHMC_data.xarray[i] = 1.0;
-        IHMC_data.yarray[i] = 1.0;
-        IHMC_data.zarray[i] = 1.0;
+        IHMC_data.yarray[i] = 2.0;
+        IHMC_data.zarray[i] = 3.0;
 
     }
 
