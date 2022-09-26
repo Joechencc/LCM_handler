@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 
     lcm::LCM *lcm = new lcm::LCM("udpm://239.255.76.67:7667?ttl=255");
         
-    Mat img_color = imread("/home/prithvidevkv/image_test.jpg", IMREAD_COLOR);
+    Mat img_color = imread("/home/prithvidevkv/image_test_2.jpg", IMREAD_UNCHANGED);
 
      if (img_color.empty()) 
      {
@@ -23,16 +23,17 @@ int main(int argc, char **argv)
       cin.get(); //wait for any key press
       return -1;
      }
-        
+    cout << img_color.size() <<endl;
+    cout << img_color.at<double>(0,100) << endl;
     image_data_t FRST_data;
-    int width=512, height=512;
-    float image[width][height] = {0};
+    int width=256, height=256;
+    double image[width][height] = {0};
     
     for(int i=0; i<width; i++)
     {
         for(int j=0; j<height; j++)
         {
-                FRST_data.data[i][j] = img_color.at<float>(i,j);
+                FRST_data.data[i][j] = img_color.at<double>(i,j);
 
         }
     }
