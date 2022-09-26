@@ -1,4 +1,4 @@
 struct image_data_t
 {
-    float data[512][512][3];
+    float data[512][512];
 }

@@ -2,9 +2,7 @@
 #define SENDER_LCM_H
 
 #include <lcm/lcm-cpp.hpp>
-#include "spi_command_t.hpp"
-#include "spi_data_t.hpp"
-#include "pcl_type.hpp"
+#include "image_data_t.hpp"
 
 class Handler {
   public:
@@ -13,7 +11,7 @@ class Handler {
                        const image_data_t *msg)
     {
         printf("Received message on channel \"%s\":\n", chan.c_str());
-        printf("  q_des_abad   = %f %f %f %f \n", (float) msg->data[0][0][0]);
+        printf("  data   = %f \n", (float) msg->data[0][0]);
     }
 };
 

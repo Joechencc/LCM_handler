@@ -14,7 +14,7 @@
 class image_data_t
 {
     public:
-        float      data[512][512][3];
+        float      data[512][512];
 
     public:
         /**
@@ -113,10 +113,8 @@ int image_data_t::_encodeNoHash(void *buf, int offset, int maxlen) const
     int pos = 0, tlen;
 
     for (int a0 = 0; a0 < 512; a0++) {
-        for (int a1 = 0; a1 < 512; a1++) {
-            tlen = __float_encode_array(buf, offset + pos, maxlen - pos, &this->data[a0][a1][0], 3);
-            if(tlen < 0) return tlen; else pos += tlen;
-        }
+        tlen = __float_encode_array(buf, offset + pos, maxlen - pos, &this->data[a0][0], 512);
+        if(tlen < 0) return tlen; else pos += tlen;
     }
 
     return pos;
@@ -127,10 +125,8 @@ int image_data_t::_decodeNoHash(const void *buf, int offset, int maxlen)
     int pos = 0, tlen;
 
     for (int a0 = 0; a0 < 512; a0++) {
-        for (int a1 = 0; a1 < 512; a1++) {
-            tlen = __float_decode_array(buf, offset + pos, maxlen - pos, &this->data[a0][a1][0], 3);
-            if(tlen < 0) return tlen; else pos += tlen;
-        }
+        tlen = __float_decode_array(buf, offset + pos, maxlen - pos, &this->data[a0][0], 512);
+        if(tlen < 0) return tlen; else pos += tlen;
     }
 
     return pos;
@@ -139,13 +135,13 @@ int image_data_t::_decodeNoHash(const void *buf, int offset, int maxlen)
 int image_data_t::_getEncodedSizeNoHash() const
 {
     int enc_size = 0;
-    enc_size += 512 * 512 * __float_encoded_array_size(NULL, 3);
+    enc_size += 512 * __float_encoded_array_size(NULL, 512);
     return enc_size;
 }
 
 uint64_t image_data_t::_computeHash(const __lcm_hash_ptr *)
 {
-    uint64_t hash = 0x546ff1b9e5b72aeeLL;
+    uint64_t hash = 0x5bea22546ff3b9e5LL;
     return (hash<<1) + ((hash>>63)&1);
 }
 

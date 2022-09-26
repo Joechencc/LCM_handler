@@ -1,38 +1,51 @@
 // run method 
-// g++ -o sender_LCM sender_LCM.cpp -llcm
+// g++ -o image_sender_LCM image_sender_LCM.cpp -llcm -I /usr/local/include/opencv4/ -lopencv_core -lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_videoio
 
-
-#include "sender_LCM.h"
+#include "image_sender_LCM.h"
+#include <iostream>
+#include <typeinfo>
 #include <opencv2/opencv.hpp>
 
+using namespace std;
+using namespace cv;
 
 
 int main(int argc, char **argv)
-{   
+{  
+
     lcm::LCM *lcm = new lcm::LCM("udpm://239.255.76.67:7667?ttl=255");
-    
-    Mat image = imread("/home/prithvidevkv/image0000.jpg");
-    // Check for failure
-     if (image.empty()) 
+        
+    Mat img_color = imread("/home/prithvidevkv/image_test.jpg", IMREAD_COLOR);
+
+     if (img_color.empty()) 
      {
       cout << "Could not open or find the image" << endl;
       cin.get(); //wait for any key press
       return -1;
      }
-    
+        
     image_data_t FRST_data;
-    FRST_data.data = image;
+    int width=512, height=512;
+    float image[width][height] = {0};
+    
+    for(int i=0; i<width; i++)
+    {
+        for(int j=0; j<height; j++)
+        {
+                FRST_data.data[i][j] = img_color.at<float>(i,j);
+
+        }
+    }
+
+
+   //FRST_data.data = image;
 
     if (!lcm->good())
         return 1;
 
 
-    lcm->publish("image_command_IHMC", &FRST_data);
+    lcm->publish("image_command_FRST", &FRST_data);
 
-    //Handler handlerObject;
-    //lcm->subscribe("image_data", &Handler::handleMessage, &handlerObject);
-
-    //lcm->handleTimeout(1200);
 
     return 0;
 }
