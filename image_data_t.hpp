@@ -16,6 +16,8 @@ class image_data_t
     public:
         int32_t    data[256][256][3];
 
+        int32_t    ID;
+
     public:
         /**
          * Encode a message into binary form.
@@ -119,6 +121,9 @@ int image_data_t::_encodeNoHash(void *buf, int offset, int maxlen) const
         }
     }
 
+    tlen = __int32_t_encode_array(buf, offset + pos, maxlen - pos, &this->ID, 1);
+    if(tlen < 0) return tlen; else pos += tlen;
+
     return pos;
 }
 
@@ -133,6 +138,9 @@ int image_data_t::_decodeNoHash(const void *buf, int offset, int maxlen)
         }
     }
 
+    tlen = __int32_t_decode_array(buf, offset + pos, maxlen - pos, &this->ID, 1);
+    if(tlen < 0) return tlen; else pos += tlen;
+
     return pos;
 }
 
@@ -140,12 +148,13 @@ int image_data_t::_getEncodedSizeNoHash() const
 {
     int enc_size = 0;
     enc_size += 256 * 256 * __int32_t_encoded_array_size(NULL, 3);
+    enc_size += __int32_t_encoded_array_size(NULL, 1);
     return enc_size;
 }
 
 uint64_t image_data_t::_computeHash(const __lcm_hash_ptr *)
 {
-    uint64_t hash = 0x91051271b655a8caLL;
+    uint64_t hash = 0xd53dc59d791cbad4LL;
     return (hash<<1) + ((hash>>63)&1);
 }
 

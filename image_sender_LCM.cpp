@@ -12,11 +12,11 @@ using namespace cv;
 
 int main(int argc, char **argv)
 {  
-
+    int width=256, height=256;
+    int sender_ID = 2;
     lcm::LCM *lcm = new lcm::LCM("udpm://239.255.76.67:7667?ttl=255");
         
     Mat img_color = imread("/home/prithvidevkv/image_test_2.jpg", IMREAD_COLOR);
-    cout<< img_color.type()<< endl;
 
      if (img_color.empty()) 
      {
@@ -25,7 +25,7 @@ int main(int argc, char **argv)
       return -1;
      }
     image_data_t FRST_data;
-    int width=256, height=256;
+    
     int image[width][height] = {0};
     
     for(int i=0; i<width; i++)
@@ -43,9 +43,10 @@ int main(int argc, char **argv)
 
         }
     }
-    cout<< FRST_data.data[0][10]<<endl;
+    //cout<< FRST_data.data[0][10]<<endl;
    //FRST_data.data = image;
-
+    FRST_data.ID = sender_ID;
+    
     if (!lcm->good())
         return 1;
 
