@@ -11,7 +11,7 @@ class Handler {
                        const image_data_t *msg)
     {
         printf("Received message on channel \"%s\":\n", chan.c_str());
-        printf("  data   = %f \n", (float) msg->data[0][0]);
+        printf("  data   = %d \n", (int) msg->data[0][0][0]);
     }
 };
 

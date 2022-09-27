@@ -15,7 +15,8 @@ int main(int argc, char **argv)
 
     lcm::LCM *lcm = new lcm::LCM("udpm://239.255.76.67:7667?ttl=255");
         
-    Mat img_color = imread("/home/prithvidevkv/image_test_2.jpg", IMREAD_UNCHANGED);
+    Mat img_color = imread("/home/prithvidevkv/image_test_2.jpg", IMREAD_COLOR);
+    cout<< img_color.type()<< endl;
 
      if (img_color.empty()) 
      {
@@ -23,22 +24,26 @@ int main(int argc, char **argv)
       cin.get(); //wait for any key press
       return -1;
      }
-    cout << img_color.size() <<endl;
-    cout << img_color.at<double>(0,100) << endl;
     image_data_t FRST_data;
     int width=256, height=256;
-    double image[width][height] = {0};
+    int image[width][height] = {0};
     
     for(int i=0; i<width; i++)
     {
         for(int j=0; j<height; j++)
         {
-                FRST_data.data[i][j] = img_color.at<double>(i,j);
+                Vec3b intensity = img_color.at<Vec3b>(i, j);
+                int32_t blue = intensity.val[0];
+                int32_t green = intensity.val[1];
+                int32_t red = intensity.val[2];
+                
+                FRST_data.data[i][j][0]= blue;
+                FRST_data.data[i][j][1]= green;
+                FRST_data.data[i][j][2]= red;
 
         }
     }
-
-
+    cout<< FRST_data.data[0][10]<<endl;
    //FRST_data.data = image;
 
     if (!lcm->good())

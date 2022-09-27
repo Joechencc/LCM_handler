@@ -1,4 +1,4 @@
 struct image_data_t
 {
-    double data[256][256];
+    int32_t data[256][256][3];
 }
