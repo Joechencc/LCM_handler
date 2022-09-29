@@ -1,5 +1,5 @@
 struct image_data_t
 {
-    int32_t data[256][256][3];
-    int32_t ID;
+    int8_t data[640][640][1];
+    int8_t ID;
 }

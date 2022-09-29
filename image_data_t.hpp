@@ -14,9 +14,9 @@
 class image_data_t
 {
     public:
-        int32_t    data[256][256][3];
+        int8_t     data[640][640][1];
 
-        int32_t    ID;
+        int8_t     ID;
 
     public:
         /**
@@ -114,14 +114,14 @@ int image_data_t::_encodeNoHash(void *buf, int offset, int maxlen) const
 {
     int pos = 0, tlen;
 
-    for (int a0 = 0; a0 < 256; a0++) {
-        for (int a1 = 0; a1 < 256; a1++) {
-            tlen = __int32_t_encode_array(buf, offset + pos, maxlen - pos, &this->data[a0][a1][0], 3);
+    for (int a0 = 0; a0 < 640; a0++) {
+        for (int a1 = 0; a1 < 640; a1++) {
+            tlen = __int8_t_encode_array(buf, offset + pos, maxlen - pos, &this->data[a0][a1][0], 1);
             if(tlen < 0) return tlen; else pos += tlen;
         }
     }
 
-    tlen = __int32_t_encode_array(buf, offset + pos, maxlen - pos, &this->ID, 1);
+    tlen = __int8_t_encode_array(buf, offset + pos, maxlen - pos, &this->ID, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
     return pos;
@@ -131,14 +131,14 @@ int image_data_t::_decodeNoHash(const void *buf, int offset, int maxlen)
 {
     int pos = 0, tlen;
 
-    for (int a0 = 0; a0 < 256; a0++) {
-        for (int a1 = 0; a1 < 256; a1++) {
-            tlen = __int32_t_decode_array(buf, offset + pos, maxlen - pos, &this->data[a0][a1][0], 3);
+    for (int a0 = 0; a0 < 640; a0++) {
+        for (int a1 = 0; a1 < 640; a1++) {
+            tlen = __int8_t_decode_array(buf, offset + pos, maxlen - pos, &this->data[a0][a1][0], 1);
             if(tlen < 0) return tlen; else pos += tlen;
         }
     }
 
-    tlen = __int32_t_decode_array(buf, offset + pos, maxlen - pos, &this->ID, 1);
+    tlen = __int8_t_decode_array(buf, offset + pos, maxlen - pos, &this->ID, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
     return pos;
@@ -147,14 +147,14 @@ int image_data_t::_decodeNoHash(const void *buf, int offset, int maxlen)
 int image_data_t::_getEncodedSizeNoHash() const
 {
     int enc_size = 0;
-    enc_size += 256 * 256 * __int32_t_encoded_array_size(NULL, 3);
-    enc_size += __int32_t_encoded_array_size(NULL, 1);
+    enc_size += 640 * 640 * __int8_t_encoded_array_size(NULL, 1);
+    enc_size += __int8_t_encoded_array_size(NULL, 1);
     return enc_size;
 }
 
 uint64_t image_data_t::_computeHash(const __lcm_hash_ptr *)
 {
-    uint64_t hash = 0xd53dc59d791cbad4LL;
+    uint64_t hash = 0x2349c5be0d48030fLL;
     return (hash<<1) + ((hash>>63)&1);
 }
 

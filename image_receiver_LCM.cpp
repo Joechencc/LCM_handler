@@ -23,22 +23,26 @@ class Handler {
     {	
         printf("Received message on channel \"%s\":\n", chan.c_str());
         printf("  data[0][10][0]   = %d \n", msg->data[0][10][0]);
-        int width=256, height=256;
+        int width=640, height=640;
 
-        Mat img_color(width,height,CV_8UC3);;
+        Mat img_color(width, height, CV_8UC3);
+        
         for(int i=0; i<width; i++)
         {
                 for(int j=0; j<height; j++)
                 {
-                        img_color.at<Vec3b>(i, j).val[0] = msg->data[i][j][0];
-                        img_color.at<Vec3b>(i, j).val[1] = msg->data[i][j][1];
-                        img_color.at<Vec3b>(i, j).val[2] = msg->data[i][j][2];
+                        //cout << msg->data[i][j][0] << endl;
+                        img_color.at<Vec3b>(i, j).val[0] = (int8_t)msg->data[i][j][0];
+                        img_color.at<Vec3b>(i, j).val[1] = (int8_t)msg->data[i][j][0];
+                        img_color.at<Vec3b>(i, j).val[2] = (int8_t)msg->data[i][j][0];
                 }
         }
+    Mat gray_image(width, height, CV_8UC3);
+    //cv::cvtColor(img_color, gray_image, cv::COLOR_GRAY2BGR);
     system_clock::time_point tp = system_clock::now();
     system_clock::duration dtn = tp.time_since_epoch();
     cout << dtn.count() << endl;
-    bool check = imwrite("/home/prithvidevkv/received/Out_" + to_string(dtn.count()) + "_" + std::to_string(msg->ID)+".jpg", img_color);
+    bool check = imwrite("/home/prithvidevkv2/received/Out_" + to_string(dtn.count()) + "_" + std::to_string(msg->ID)+".jpg", img_color);
 
     }
 };
