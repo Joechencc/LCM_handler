@@ -4,6 +4,8 @@
 #include "image_sender_LCM.h"
 #include <iostream>
 #include <typeinfo>
+#include <unistd.h>
+#include <string>
 #include <opencv2/opencv.hpp>
 
 using namespace std;
@@ -12,11 +14,20 @@ using namespace cv;
 
 int main(int argc, char **argv)
 {  
-    int width=256, height=256;
-    int sender_ID = 2;
+    int width=640, height=640;
+    int sender_ID = 1;
     lcm::LCM *lcm = new lcm::LCM("udpm://239.255.76.67:7667?ttl=255");
         
-    Mat img_color = imread("/home/prithvidevkv/image_test_2.jpg", IMREAD_COLOR);
+    std::string arg1(argv[1]);
+    
+    cout << "Sending Image: " << arg1 << "\n" << endl;
+        
+        
+    Mat img_color = imread(arg1, IMREAD_COLOR);
+    Mat gray_image;
+    cv::cvtColor(img_color, gray_image, cv::COLOR_BGR2GRAY );
+    
+    cout << gray_image.type() << endl;
 
      if (img_color.empty()) 
      {
@@ -24,6 +35,9 @@ int main(int argc, char **argv)
       cin.get(); //wait for any key press
       return -1;
      }
+     
+    int counter = 0;
+     
     image_data_t FRST_data;
     
     int image[width][height] = {0};
@@ -32,19 +46,21 @@ int main(int argc, char **argv)
     {
         for(int j=0; j<height; j++)
         {
-                Vec3b intensity = img_color.at<Vec3b>(i, j);
-                int32_t blue = intensity.val[0];
-                int32_t green = intensity.val[1];
-                int32_t red = intensity.val[2];
+                int8_t intensity = (int8_t)gray_image.at<uchar>(i, j);
+                //cout << (int)gray_image.at<uchar>(i, j) << endl;
                 
-                FRST_data.data[i][j][0]= blue;
-                FRST_data.data[i][j][1]= green;
-                FRST_data.data[i][j][2]= red;
+                //int32_t blue = intensity.val[0];
+                //int32_t green = intensity.val[1];
+                //int32_t red = intensity.val[2];
+                
+                FRST_data.data[i][j][0]= intensity;
+                //FRST_data.data[i][j][1]= green;
+                //FRST_data.data[i][j][2]= red;
 
         }
     }
     //cout<< FRST_data.data[0][10]<<endl;
-   //FRST_data.data = image;
+    //FRST_data.data = image;
     FRST_data.ID = sender_ID;
     
     if (!lcm->good())
@@ -52,8 +68,8 @@ int main(int argc, char **argv)
 
 
     lcm->publish("image_command_FRST", &FRST_data);
-
-
+    counter = counter + 1;
+    sleep(1);
     return 0;
 }
 
